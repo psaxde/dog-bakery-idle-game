@@ -1009,8 +1009,12 @@ function renderShop() {
       if (touchDevice && state.cookies < u.cost) { showTipTap(e, tipHtml); return; }
       buyUpgrade(u);
     });
-    btn.addEventListener('mousemove', e => showTip(e, tipHtml));
-    btn.addEventListener('mouseleave', hideTip);
+    // mouseleave nicht auf Touch registrieren: das Kompat-Event nach dem Tap
+    // würde den Tap-Tooltip sofort wieder verstecken
+    if (!touchDevice) {
+      btn.addEventListener('mousemove', e => showTip(e, tipHtml));
+      btn.addEventListener('mouseleave', hideTip);
+    }
     elUpgrades.appendChild(btn);
   }
 
@@ -1028,9 +1032,12 @@ function renderAchievements() {
     const tipHtml = unlocked
       ? `<b>${a.icon} ${a.name}</b><br>${a.desc}<br><b>+1 % Produktion</b>`
       : `<b>❓ ???</b><br>${a.desc}`;
-    d.addEventListener('mousemove', e => showTip(e, tipHtml));
-    d.addEventListener('mouseleave', hideTip);
-    if (touchDevice) d.addEventListener('click', e => showTipTap(e, tipHtml));
+    if (touchDevice) {
+      d.addEventListener('click', e => showTipTap(e, tipHtml));
+    } else {
+      d.addEventListener('mousemove', e => showTip(e, tipHtml));
+      d.addEventListener('mouseleave', hideTip);
+    }
     elAch.appendChild(d);
   }
 }
@@ -1196,16 +1203,21 @@ function bake(clientX, clientY) {
 
 // pointerdown statt click: reagiert sofort, zählt jeden Finger einzeln
 // und löst keinen Doppeltipp-Zoom aus
+let pointerBaked = false;
 biscuit.addEventListener('pointerdown', e => {
   e.preventDefault();
+  pointerBaked = true;
   bake(e.clientX, e.clientY);
 });
-// Tastatur-Bedienung (Enter/Leertaste) weiter ermöglichen
+// Tastatur-Bedienung (Enter/Leertaste) weiter ermöglichen.
+// Achtung: Der Touch-Kompatibilitäts-click kommt nach preventDefault mit
+// detail=0 an – deshalb zusätzlich per Flag den click nach pointerdown schlucken.
 biscuit.addEventListener('click', e => {
-  if (e.detail === 0) {
-    const r = wrap.getBoundingClientRect();
-    bake(r.left + r.width / 2, r.top + r.height / 2);
-  }
+  const fromPointer = pointerBaked;
+  pointerBaked = false;
+  if (fromPointer || e.detail !== 0) return;
+  const r = wrap.getBoundingClientRect();
+  bake(r.left + r.width / 2, r.top + r.height / 2);
 });
 
 /* ───────────── Touch-Schutz (Zoom & Kontextmenü) ───────────── */
