@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wuff &amp; Knusper – Die Hundebäckerei</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦴</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:   #FBF1DE;
+    --paper:   #F5E5C8;
+    --card:    #FFF8EB;
+    --crust:   #C68A4B;
+    --caramel: #A96A2F;
+    --choco:   #5B3A24;
+    --deep:    #3A2415;
+    --red:     #C94F3D;
+    --red-dark:#A93B2B;
+    --green:   #6B8F4E;
+    --gold:    #E8B64C;
+    --shadow:  0 6px 0 rgba(91,58,36,.18);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html { height:100%; }
+
+  body {
+    min-height:100%;
+    font-family:'Nunito', sans-serif;
+    color:var(--deep);
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cg fill='%23c68a4b' fill-opacity='0.09'%3E%3Cellipse cx='40' cy='48' rx='13' ry='10'/%3E%3Ccircle cx='25' cy='31' r='5.5'/%3E%3Ccircle cx='40' cy='26' r='5.5'/%3E%3Ccircle cx='55' cy='31' r='5.5'/%3E%3C/g%3E%3Cg fill='%23c68a4b' fill-opacity='0.06' transform='rotate(35 105 105)'%3E%3Cellipse cx='105' cy='112' rx='11' ry='8.5'/%3E%3Ccircle cx='92' cy='98' r='4.5'/%3E%3Ccircle cx='105' cy='94' r='4.5'/%3E%3Ccircle cx='118' cy='98' r='4.5'/%3E%3C/g%3E%3C/svg%3E"),
+      linear-gradient(180deg, var(--cream) 0%, var(--paper) 100%);
+    background-attachment:fixed;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3,.display { font-family:'Baloo 2', cursive; }
+
+  /* ───────────── Markise / Header ───────────── */
+  .awning {
+    position:relative;
+    background:repeating-linear-gradient(90deg,
+      var(--red) 0 56px, var(--cream) 56px 112px);
+    height:54px;
+    box-shadow:0 4px 12px rgba(58,36,21,.25);
+  }
+  .awning::after {
+    content:"";
+    position:absolute; left:0; right:0; top:100%; height:28px;
+    background:
+      radial-gradient(circle at 28px -2px, var(--red) 26px, transparent 27px) 0 0/112px 28px repeat-x,
+      radial-gradient(circle at 28px -2px, var(--cream) 26px, transparent 27px) 56px 0/112px 28px repeat-x;
+    filter:drop-shadow(0 5px 4px rgba(58,36,21,.18));
+    pointer-events:none;
+  }
+
+  header.brand {
+    text-align:center;
+    padding:46px 16px 6px;
+  }
+  header.brand h1 {
+    font-size:clamp(2rem, 5vw, 3.2rem);
+    font-weight:800;
+    color:var(--choco);
+    letter-spacing:.5px;
+    line-height:1;
+    text-shadow:0 3px 0 rgba(198,138,75,.35);
+  }
+  header.brand h1 .amp { color:var(--red); }
+  header.brand .tagline {
+    margin-top:6px;
+    font-style:italic;
+    font-weight:600;
+    color:var(--caramel);
+    font-size:1rem;
+  }
+
+  /* News-Ticker */
+  .ticker {
+    max-width:680px;
+    margin:14px auto 0;
+    background:var(--choco);
+    color:var(--cream);
+    border-radius:999px;
+    padding:7px 22px;
+    font-size:.9rem;
+    font-weight:600;
+    text-align:center;
+    box-shadow:var(--shadow);
+    min-height:34px;
+    transition:opacity .4s;
+  }
+  .ticker.fade { opacity:0; }
+
+  /* ───────────── Layout ───────────── */
+  .game {
+    display:grid;
+    grid-template-columns:minmax(0,1.2fr) minmax(320px,420px);
+    gap:28px;
+    max-width:1100px;
+    margin:26px auto 60px;
+    padding:0 20px;
+    align-items:start;
+  }
+  @media (max-width:860px) {
+    .game { grid-template-columns:1fr; }
+  }
+
+  /* ───────────── Klicker-Bereich ───────────── */
+  .bakery {
+    text-align:center;
+    position:relative;
+  }
+
+  .counter .display {
+    font-size:clamp(2.4rem, 6vw, 3.6rem);
+    font-weight:800;
+    color:var(--choco);
+    line-height:1.05;
+  }
+  .counter .unit { font-size:.55em; color:var(--caramel); }
+  .counter .cps {
+    font-weight:700;
+    color:var(--caramel);
+    margin-top:2px;
+    font-size:1.05rem;
+  }
+
+  /* Aktive Boni */
+  .buffs { min-height:30px; margin-top:8px; }
+  .buff-pill {
+    display:inline-block;
+    background:linear-gradient(90deg, var(--gold), #f5d57a);
+    color:var(--deep);
+    border:2px solid #c9952d;
+    border-radius:999px;
+    font-weight:800;
+    font-size:.85rem;
+    padding:3px 14px;
+    margin:0 4px;
+    animation:pulse 1s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { transform:scale(1); }
+    50%     { transform:scale(1.06); }
+  }
+
+  .clicker-wrap {
+    position:relative;
+    margin:14px auto 8px;
+    width:min(360px, 80vw);
+    user-select:none;
+    -webkit-user-select:none;
+  }
+  .biscuit-btn {
+    width:100%;
+    background:none; border:none; cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:transform .08s ease, filter .3s ease;
+    filter:drop-shadow(0 14px 18px rgba(91,58,36,.35));
+  }
+  body.frenzy .biscuit-btn { filter:drop-shadow(0 0 26px rgba(232,182,76,.95)); }
+  .biscuit-btn:hover { transform:scale(1.035); }
+  .biscuit-btn:active { transform:scale(.94); }
+  .biscuit-btn.squish { animation:squish .25s ease; }
+  @keyframes squish {
+    0%   { transform:scale(1); }
+    35%  { transform:scale(.92, .88) rotate(-1.5deg); }
+    70%  { transform:scale(1.04, 1.02) rotate(1deg); }
+    100% { transform:scale(1); }
+  }
+  .biscuit-btn svg { display:block; width:100%; height:auto; animation:bob 4s ease-in-out infinite; }
+  @keyframes bob {
+    0%,100% { transform:translateY(0) rotate(-1deg); }
+    50%     { transform:translateY(-8px) rotate(1deg); }
+  }
+
+  .float-num {
+    position:absolute;
+    font-family:'Baloo 2', cursive;
+    font-weight:800;
+    font-size:1.5rem;
+    color:var(--red);
+    text-shadow:0 2px 0 var(--cream);
+    pointer-events:none;
+    animation:floatUp 1s ease-out forwards;
+    z-index:5;
+    white-space:nowrap;
+  }
+  @keyframes floatUp {
+    0%   { opacity:1; transform:translate(-50%,0) scale(1); }
+    100% { opacity:0; transform:translate(-50%,-90px) scale(1.25); }
+  }
+
+  .crumb {
+    position:absolute;
+    width:9px; height:9px;
+    border-radius:50% 40% 55% 45%;
+    background:var(--crust);
+    pointer-events:none;
+    animation:crumbFly .7s ease-out forwards;
+    z-index:4;
+  }
+  @keyframes crumbFly {
+    0%   { opacity:1; transform:translate(0,0) rotate(0deg) scale(1); }
+    100% { opacity:0; transform:translate(var(--dx), var(--dy)) rotate(220deg) scale(.4); }
+  }
+
+  .click-hint {
+    font-weight:700; color:var(--caramel);
+    font-size:.95rem; opacity:.85;
+  }
+
+  /* Meilenstein & Prestige */
+  .milestone {
+    margin:22px auto 0;
+    max-width:420px;
+    background:var(--card);
+    border:3px solid var(--crust);
+    border-radius:18px;
+    padding:14px 18px;
+    box-shadow:var(--shadow);
+    text-align:left;
+  }
+  .milestone h3 { color:var(--choco); font-size:1.05rem; display:flex; justify-content:space-between; align-items:baseline; }
+  .milestone h3 .lvl { color:var(--red); }
+  .milestone .next { font-size:.82rem; color:var(--caramel); font-weight:700; margin-top:2px; }
+  .bar {
+    margin-top:8px;
+    height:14px;
+    background:var(--paper);
+    border-radius:999px;
+    overflow:hidden;
+    border:2px solid rgba(198,138,75,.5);
+  }
+  .bar > i {
+    display:block; height:100%;
+    width:0%;
+    background:linear-gradient(90deg, var(--gold), var(--red));
+    border-radius:999px;
+    transition:width .4s ease;
+  }
+
+  .prestige { border-color:var(--gold); background:linear-gradient(180deg, #fff8e6, #fdf0d2); }
+  .prestige h3 .lvl { color:#b8860b; }
+  .prestige button {
+    margin-top:10px;
+    width:100%;
+    font-family:'Baloo 2',cursive;
+    font-weight:800;
+    font-size:1rem;
+    background:linear-gradient(90deg, var(--gold), #d99a2b);
+    color:var(--deep);
+    border:none;
+    border-radius:12px;
+    padding:10px;
+    cursor:pointer;
+    box-shadow:0 4px 0 #a8741a;
+    transition:transform .12s;
+  }
+  .prestige button:hover { transform:translateY(-2px); }
+  .prestige button:disabled {
+    background:var(--paper); color:rgba(91,58,36,.45);
+    box-shadow:none; cursor:not-allowed; transform:none;
+  }
+
+  .stats-row {
+    display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
+    margin-top:18px; font-size:.85rem; font-weight:700; color:var(--caramel);
+  }
+  .stats-row span {
+    background:var(--card);
+    border:2px solid rgba(198,138,75,.45);
+    border-radius:999px;
+    padding:5px 14px;
+  }
+
+  /* ───────────── Shop ───────────── */
+  .shop {
+    background:var(--card);
+    border:3px solid var(--crust);
+    border-radius:22px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .shop-head {
+    background:repeating-linear-gradient(90deg, var(--red) 0 34px, var(--red-dark) 34px 68px);
+    color:var(--cream);
+    padding:13px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .shop-head h2 { font-size:1.35rem; letter-spacing:.5px; }
+  .buy-toggle { display:flex; gap:5px; }
+  .buy-toggle button {
+    font-family:'Baloo 2',cursive; font-weight:700;
+    background:rgba(255,255,255,.18); color:var(--cream);
+    border:2px solid rgba(255,255,255,.45);
+    border-radius:9px;
+    padding:3px 10px; cursor:pointer; font-size:.85rem;
+    transition:background .15s;
+  }
+  .buy-toggle button.active { background:var(--cream); color:var(--red-dark); border-color:var(--cream); }
+
+  .shop-section-title {
+    font-family:'Baloo 2',cursive;
+    font-weight:700; font-size:.95rem;
+    color:var(--caramel);
+    padding:12px 20px 4px;
+    text-transform:uppercase; letter-spacing:1.5px;
+  }
+
+  .upgrades {
+    display:flex; flex-wrap:wrap; gap:8px;
+    padding:6px 20px 10px;
+  }
+  .upg {
+    width:52px; height:52px;
+    border-radius:14px;
+    border:3px solid var(--crust);
+    background:var(--paper);
+    font-size:1.45rem;
+    cursor:pointer;
+    display:grid; place-items:center;
+    transition:transform .12s, box-shadow .12s;
+    position:relative;
+  }
+  .upg:hover { transform:translateY(-3px); box-shadow:0 5px 0 rgba(91,58,36,.25); }
+  .upg.locked { opacity:.45; cursor:not-allowed; filter:grayscale(.6); }
+  .upg.locked:hover { transform:none; box-shadow:none; }
+  .upgrades .empty { font-size:.85rem; font-weight:700; color:var(--caramel); opacity:.7; padding:6px 0; }
+
+  /* Erfolge */
+  .ach-grid .upg { width:44px; height:44px; font-size:1.2rem; cursor:help; border-color:var(--gold); background:#fff3d6; }
+  .ach-grid .upg.locked { border-color:rgba(198,138,75,.4); background:var(--paper); opacity:.35; }
+  .ach-grid .upg:hover { transform:none; box-shadow:none; }
+
+  .buildings { padding:4px 14px 16px; display:flex; flex-direction:column; gap:9px; }
+  .b-item {
+    display:grid;
+    grid-template-columns:54px 1fr auto;
+    gap:12px;
+    align-items:center;
+    background:var(--paper);
+    border:3px solid transparent;
+    border-radius:16px;
+    padding:9px 14px 9px 9px;
+    cursor:pointer;
+    text-align:left;
+    width:100%;
+    font-family:inherit;
+    transition:transform .12s, border-color .15s, opacity .15s;
+  }
+  .b-item:hover:not(.cant) { transform:translateX(4px); border-color:var(--crust); }
+  .b-item.cant { opacity:.55; cursor:not-allowed; }
+  .b-item .ico {
+    width:54px; height:54px;
+    background:var(--card);
+    border:2px solid rgba(198,138,75,.5);
+    border-radius:13px;
+    display:grid; place-items:center;
+    font-size:1.7rem;
+  }
+  .b-item .info .name {
+    font-family:'Baloo 2',cursive;
+    font-weight:700; font-size:1.02rem; color:var(--choco);
+  }
+  .b-item .info .desc { font-size:.76rem; color:var(--caramel); font-weight:600; line-height:1.25; }
+  .b-item .info .prod { font-size:.76rem; color:var(--green); font-weight:800; }
+  .b-item .right { text-align:right; }
+  .b-item .count {
+    font-family:'Baloo 2',cursive;
+    font-size:1.5rem; font-weight:800; color:rgba(91,58,36,.35);
+    line-height:1;
+  }
+  .b-item .cost { font-size:.85rem; font-weight:800; color:var(--green); white-space:nowrap; }
+  .b-item.cant .cost { color:var(--red); }
+
+  /* ───────────── Goldener Knochen ───────────── */
+  .goldbone {
+    position:fixed;
+    z-index:45;
+    font-size:3.2rem;
+    cursor:pointer;
+    background:none; border:none;
+    filter:drop-shadow(0 0 14px rgba(232,182,76,1)) drop-shadow(0 0 30px rgba(232,182,76,.6));
+    animation:goldFloat 2.2s ease-in-out infinite, goldIn .4s ease-out;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .goldbone::after {
+    content:"✨";
+    position:absolute; top:-12px; right:-12px;
+    font-size:1.3rem;
+    animation:pulse .9s infinite;
+  }
+  @keyframes goldFloat {
+    0%,100% { transform:translateY(0) rotate(-8deg); }
+    50%     { transform:translateY(-14px) rotate(8deg); }
+  }
+  @keyframes goldIn {
+    from { opacity:0; scale:.3; }
+    to   { opacity:1; scale:1; }
+  }
+
+  /* Hunde-Kundschaft */
+  .walker {
+    position:fixed;
+    bottom:6px;
+    left:-90px;
+    font-size:2.3rem;
+    z-index:30;
+    pointer-events:none;
+    animation:walk linear forwards;
+  }
+  .walker > span { display:inline-block; animation:trot .5s ease-in-out infinite; }
+  .walker.flip > span { transform:scaleX(-1); }
+  .walker.flip.r > span { animation:trotFlip .5s ease-in-out infinite; }
+  @keyframes walk { to { transform:translateX(calc(100vw + 180px)); } }
+  @keyframes trot {
+    0%,100% { transform:translateY(0) rotate(0); }
+    50%     { transform:translateY(-5px) rotate(3deg); }
+  }
+  @keyframes trotFlip {
+    0%,100% { transform:scaleX(-1) translateY(0); }
+    50%     { transform:scaleX(-1) translateY(-5px) rotate(-3deg); }
+  }
+
+  /* Tooltip */
+  .tip {
+    position:fixed;
+    z-index:50;
+    background:var(--deep);
+    color:var(--cream);
+    border-radius:12px;
+    padding:9px 13px;
+    font-size:.82rem;
+    font-weight:600;
+    max-width:230px;
+    pointer-events:none;
+    opacity:0;
+    transition:opacity .12s;
+    box-shadow:0 8px 20px rgba(0,0,0,.3);
+  }
+  .tip b { color:var(--gold); }
+  .tip.show { opacity:1; }
+
+  /* Toast */
+  .toast {
+    position:fixed;
+    left:50%; bottom:26px;
+    transform:translate(-50%, 140%);
+    background:var(--choco);
+    color:var(--cream);
+    padding:13px 26px;
+    border-radius:999px;
+    font-weight:700;
+    box-shadow:0 10px 26px rgba(58,36,21,.4);
+    transition:transform .45s cubic-bezier(.2,1.4,.4,1);
+    z-index:60;
+    max-width:90vw;
+    text-align:center;
+  }
+  .toast.show { transform:translate(-50%, 0); }
+
+  /* Footer-Knöpfe */
+  .util {
+    display:flex; gap:10px; justify-content:center;
+    margin-top:20px;
+  }
+  .util button {
+    font-family:'Baloo 2',cursive;
+    font-weight:700; font-size:.85rem;
+    background:var(--card);
+    color:var(--caramel);
+    border:2px solid rgba(198,138,75,.5);
+    border-radius:999px;
+    padding:6px 16px;
+    cursor:pointer;
+    transition:transform .12s;
+  }
+  .util button:hover { transform:translateY(-2px); }
+
+  footer.credits {
+    text-align:center;
+    padding:0 16px 36px;
+    font-size:.78rem;
+    font-weight:600;
+    color:rgba(169,106,47,.7);
+  }
+</style>
+</head>
+<body>
+
+<div class="awning"></div>
+
+<header class="brand">
+  <h1>Wuff <span class="amp">&amp;</span> Knusper</h1>
+  <div class="tagline">Frisch gebackene Hundekekse – mit Liebe &amp; Pfote gemacht</div>
+  <div class="ticker" id="ticker">🐾 Willkommen in deiner Hundebäckerei!</div>
+</header>
+
+<main class="game">
+
+  <!-- ── Linke Seite: Backstube ── -->
+  <section class="bakery">
+    <div class="counter">
+      <div class="display"><span id="cookieCount">0</span> <span class="unit">Hundekekse</span></div>
+      <div class="cps" id="cpsLabel">0 Kekse pro Sekunde</div>
+      <div class="buffs" id="buffs"></div>
+    </div>
+
+    <div class="clicker-wrap" id="clickerWrap">
+      <button class="biscuit-btn" id="biscuit" aria-label="Hundekeks backen">
+        <svg viewBox="0 0 260 150" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="doughGrad" cx="40%" cy="32%" r="85%">
+              <stop offset="0%" stop-color="#E8B878"/>
+              <stop offset="65%" stop-color="#D49A55"/>
+              <stop offset="100%" stop-color="#BC7E3D"/>
+            </radialGradient>
+          </defs>
+          <g stroke="#8A5A2B" stroke-width="5" fill="url(#doughGrad)" stroke-linejoin="round">
+            <circle cx="52"  cy="50"  r="36"/>
+            <circle cx="52"  cy="100" r="36"/>
+            <circle cx="208" cy="50"  r="36"/>
+            <circle cx="208" cy="100" r="36"/>
+            <rect x="50" y="42" width="160" height="66" rx="33" stroke="none"/>
+          </g>
+          <rect x="50" y="42" width="160" height="66" rx="33" fill="url(#doughGrad)"/>
+          <g fill="#6B4226">
+            <circle cx="100" cy="66" r="6"/>
+            <circle cx="138" cy="88" r="7"/>
+            <circle cx="168" cy="62" r="5"/>
+            <circle cx="118" cy="100" r="5"/>
+            <circle cx="76"  cy="88" r="5"/>
+            <circle cx="186" cy="92" r="5"/>
+          </g>
+          <ellipse cx="92" cy="46" rx="34" ry="9" fill="#F6D9A8" opacity=".55" transform="rotate(-6 92 46)"/>
+          <g fill="#B07A40" opacity=".8" transform="translate(128 74) scale(.9)">
+            <ellipse cx="0" cy="6" rx="9" ry="7"/>
+            <circle cx="-10" cy="-5" r="3.6"/>
+            <circle cx="0" cy="-8" r="3.6"/>
+            <circle cx="10" cy="-5" r="3.6"/>
+          </g>
+        </svg>
+      </button>
+    </div>
+    <div class="click-hint">🐾 Klick den Keks zum Backen! <span id="perClick">(+1 pro Klick)</span></div>
+
+    <div class="milestone">
+      <h3><span id="rankName">Küchentisch-Bäckerei</span> <span class="lvl" id="rankLvl">Stufe 1</span></h3>
+      <div class="bar"><i id="rankBar"></i></div>
+      <div class="next" id="rankNext"></div>
+    </div>
+
+    <div class="milestone prestige">
+      <h3>⭐ Sterne-Rezepte <span class="lvl" id="starCount">0</span></h3>
+      <div class="next" id="starInfo"></div>
+      <button id="prestigeBtn">🌟 Bäckerei verkaufen</button>
+    </div>
+
+    <div class="stats-row">
+      <span>🍪 Insgesamt gebacken: <b id="statTotal">0</b></span>
+      <span>👆 Klicks: <b id="statClicks">0</b></span>
+      <span>🌟 Goldene Knochen: <b id="statGold">0</b></span>
+      <span>♻️ Verkäufe: <b id="statPrestige">0</b></span>
+    </div>
+
+    <div class="util">
+      <button id="soundBtn">🔔 Ton: an</button>
+      <button id="resetBtn">🗑️ Neustart</button>
+    </div>
+  </section>
+
+  <!-- ── Rechte Seite: Shop ── -->
+  <aside class="shop">
+    <div class="shop-head">
+      <h2>🛒 Laden</h2>
+      <div class="buy-toggle" id="buyToggle">
+        <button data-amount="1" class="active">×1</button>
+        <button data-amount="10">×10</button>
+        <button data-amount="max">Max</button>
+      </div>
+    </div>
+
+    <div class="shop-section-title">✨ Verbesserungen</div>
+    <div class="upgrades" id="upgrades"></div>
+
+    <div class="shop-section-title">🏠 Ausbau</div>
+    <div class="buildings" id="buildings"></div>
+
+    <div class="shop-section-title">🏆 Erfolge <span id="achLabel"></span></div>
+    <div class="upgrades ach-grid" id="achievements"></div>
+  </aside>
+
+</main>
+
+<footer class="credits">Prototyp v0.2 · Spielstand wird automatisch im Browser gespeichert 🐶</footer>
+
+<div class="tip" id="tip"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+'use strict';
+
+/* ───────────── Daten ───────────── */
+
+const BUILDINGS = [
+  { id:'welpe',    name:'Welpen-Praktikant',     icon:'🐶', desc:'Knetet Teig mit tapsigen Pfoten.',              base:15,        cps:0.1 },
+  { id:'nudelholz',name:'Knochen-Nudelholz',     icon:'🦴', desc:'Rollt den Teig in Rekordzeit aus.',             base:100,       cps:1 },
+  { id:'ofen',     name:'Bellos Backofen',       icon:'🔥', desc:'Backt rund um die Uhr auf Stufe „Wuff“.',       base:1100,      cps:8 },
+  { id:'liefer',   name:'Schnüffel-Lieferdienst',icon:'🛵', desc:'Bringt frische Kekse ins ganze Viertel.',       base:12000,     cps:47 },
+  { id:'pudel',    name:'Pudel-Konditorei',      icon:'🐩', desc:'Feinste Patisserie für verwöhnte Schnauzen.',   base:130000,    cps:260 },
+  { id:'fabrik',   name:'Keks-Fabrik',           icon:'🏭', desc:'Industrielle Mengen an Leckerlis.',             base:1400000,   cps:1400 },
+  { id:'mond',     name:'Mond-Bäckerei',         icon:'🌙', desc:'Backt Kekse in der Schwerelosigkeit.',          base:20000000,  cps:7800 },
+  { id:'rakete',   name:'Keks-Rakete',           icon:'🚀', desc:'Liefert Leckerlis in die ganze Galaxis.',       base:330000000, cps:44000 },
+];
+
+const UPGRADES = [
+  { id:'u_rolle',  name:'Bessere Teigrolle',     icon:'🥖', cost:500,      desc:'Klick-Power <b>×2</b>',                          type:'click',  mult:2 },
+  { id:'u_glasur', name:'Erdnussbutter-Glasur',  icon:'🥜', cost:5000,     desc:'Klick-Power <b>×3</b>',                          type:'click',  mult:3 },
+  { id:'u_welpen', name:'Fleißige Welpen',       icon:'🐾', cost:12000,    desc:'Welpen-Praktikanten produzieren <b>doppelt</b>', type:'building', target:'welpe', mult:2 },
+  { id:'u_form',   name:'Goldene Knochenform',   icon:'✨', cost:60000,    desc:'Gesamte Produktion <b>×2</b>',                   type:'global', mult:2 },
+  { id:'u_ofenfee',name:'Ofen-Fee',              icon:'🧚', cost:150000,   desc:'Bellos Backöfen produzieren <b>doppelt</b>',     type:'building', target:'ofen', mult:2 },
+  { id:'u_oma',    name:'Omas Geheimrezept',     icon:'📜', cost:400000,   desc:'Gesamte Produktion <b>×2</b>',                   type:'global', mult:2 },
+  { id:'u_turbo',  name:'Turbo-Roller',          icon:'🛼', cost:900000,   desc:'Schnüffel-Lieferdienst <b>×2</b>',               type:'building', target:'liefer', mult:2 },
+  { id:'u_nase',   name:'Trüffel-Spürnase',      icon:'👃', cost:2500000,  desc:'Jeder Klick bringt zusätzlich <b>1 % deiner Produktion</b>', type:'clickcps', pct:0.01 },
+  { id:'u_mehl',   name:'Magisches Mehl',        icon:'🪄', cost:8000000,  desc:'Gesamte Produktion <b>×2</b>',                   type:'global', mult:2 },
+  { id:'u_kosmos', name:'Kosmische Krümel',      icon:'🌌', cost:60000000, desc:'Gesamte Produktion <b>×3</b>',                   type:'global', mult:3 },
+];
+
+const ACHIEVEMENTS = [
+  { id:'a_first', icon:'🍪', name:'Der erste Keks',   desc:'Backe deinen allerersten Hundekeks.',        cond:s => s.total >= 1 },
+  { id:'a_t1',    icon:'🥨', name:'Fleißiger Bäcker', desc:'Backe insgesamt 1.000 Kekse.',               cond:s => s.total >= 1e3 },
+  { id:'a_t2',    icon:'🎂', name:'Keks-Profi',       desc:'Backe insgesamt 100.000 Kekse.',             cond:s => s.total >= 1e5 },
+  { id:'a_t3',    icon:'👑', name:'Keks-Royalty',     desc:'Backe insgesamt 10 Mio. Kekse.',             cond:s => s.total >= 1e7 },
+  { id:'a_t4',    icon:'💎', name:'Krümel-Milliardär',desc:'Backe insgesamt 1 Mrd. Kekse.',              cond:s => s.total >= 1e9 },
+  { id:'a_c1',    icon:'👆', name:'Klick-Welpe',      desc:'Klicke 100-mal auf den Keks.',               cond:s => s.clicks >= 100 },
+  { id:'a_c2',    icon:'💪', name:'Klick-Athlet',     desc:'Klicke 2.500-mal auf den Keks.',             cond:s => s.clicks >= 2500 },
+  { id:'a_b1',    icon:'🐶', name:'Welpen-Rudel',     desc:'Beschäftige 10 Welpen-Praktikanten.',        cond:s => s.counts.welpe >= 10 },
+  { id:'a_b2',    icon:'🔥', name:'Heiß her!',        desc:'Besitze einen Backofen.',                    cond:s => s.counts.ofen >= 1 },
+  { id:'a_b3',    icon:'🏘️', name:'Expansion',        desc:'Besitze insgesamt 50 Ausbauten.',            cond:s => totalBuildings(s) >= 50 },
+  { id:'a_b4',    icon:'🌆', name:'Keks-Metropole',   desc:'Besitze insgesamt 150 Ausbauten.',           cond:s => totalBuildings(s) >= 150 },
+  { id:'a_gold',  icon:'🌟', name:'Goldjunge',        desc:'Schnapp dir einen goldenen Knochen.',        cond:s => s.goldClicks >= 1 },
+  { id:'a_gold2', icon:'🤩', name:'Glückspfote',      desc:'Schnapp dir 10 goldene Knochen.',            cond:s => s.goldClicks >= 10 },
+  { id:'a_shop',  icon:'🛍️', name:'Shopaholic',       desc:'Kaufe alle Verbesserungen.',                 cond:s => s.owned.length >= UPGRADES.length },
+  { id:'a_pres',  icon:'♻️', name:'Neuanfang',        desc:'Verkaufe deine Bäckerei zum ersten Mal.',    cond:s => s.prestiges >= 1 },
+];
+
+const RANKS = [
+  { at:0,        name:'Küchentisch-Bäckerei' },
+  { at:500,      name:'Straßenstand' },
+  { at:5000,     name:'Hofladen' },
+  { at:50000,    name:'Dorf-Bäckerei' },
+  { at:500000,   name:'Stadt-Bäckerei' },
+  { at:5000000,  name:'Keks-Kaufhaus' },
+  { at:50000000, name:'Hundekeks-Imperium' },
+];
+
+const NEWS = [
+  '🐕 Bello kauft 12 Kekse und wedelt begeistert!',
+  '🐩 Madame Fifi lobt die neue Erdnussbutter-Note.',
+  '📰 Lokalzeitung: „Wuff & Knusper – ein Geheimtipp!“',
+  '🦮 Ein Golden Retriever bestellt die ganze Theke leer.',
+  '🐕‍🦺 Stammkunde Rex bringt drei Freunde mit.',
+  '🌭 Dackel Waldemar wartet schon seit 6 Uhr vor der Tür.',
+  '🐾 Jemand hat Pfotenabdrücke im Mehl hinterlassen…',
+  '🦴 Heute im Angebot: Knochen-Cookies mit Karamell!',
+  '🐕 Chihuahua Carlos beschwert sich: Kekse zu groß. Kauft trotzdem 20.',
+  '📦 Großbestellung vom Hundesportverein eingegangen!',
+  '🌙 Gerücht: Auf dem Mond soll es bald Hundekekse geben.',
+  '🥛 Dazu ein Schälchen Wasser? Geht aufs Haus!',
+  '✨ Man munkelt, goldene Knochen bringen Glück…',
+  '⭐ Sterne-Rezepte machen jede Bäckerei für immer besser.',
+];
+
+const COST_GROWTH = 1.15;
+const SAVE_KEY = 'wuffknusper_save_v1';
+const PRESTIGE_BASE = 1e6;           // ab 1 Mio. Kekse gibt es Sterne
+const STAR_BONUS = 0.10;             // +10 % Produktion pro Stern
+const ACH_BONUS = 0.01;              // +1 % Produktion pro Erfolg
+
+/* ───────────── Zustand ───────────── */
+
+let state = {
+  cookies: 0,
+  total: 0,          // in diesem Durchlauf gebacken
+  allTotal: 0,       // über alle Durchläufe
+  clicks: 0,
+  goldClicks: 0,
+  counts: Object.fromEntries(BUILDINGS.map(b => [b.id, 0])),
+  owned: [],         // gekaufte Upgrade-IDs
+  ach: [],           // freigeschaltete Erfolge
+  stars: 0,
+  prestiges: 0,
+  sound: true,
+  ts: Date.now(),
+};
+let buyAmount = 1;                       // 1 | 10 | 'max'
+let buffs = { frenzy: 0, click: 0 };     // Ablauf-Zeitstempel (ms)
+
+function totalBuildings(s) {
+  let n = 0;
+  for (const b of BUILDINGS) n += s.counts[b.id] || 0;
+  return n;
+}
+
+/* ───────────── Formatierung ───────────── */
+
+const nfInt = new Intl.NumberFormat('de-DE', { maximumFractionDigits: 0 });
+const nfDec = new Intl.NumberFormat('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: 1 });
+const SUFFIXES = [ [1e12,'Bio.'], [1e9,'Mrd.'], [1e6,'Mio.'] ];
+
+function fmt(n) {
+  for (const [v, s] of SUFFIXES) {
+    if (n >= v) return (n / v).toLocaleString('de-DE', { maximumFractionDigits: 2 }) + ' ' + s;
+  }
+  return nfInt.format(Math.floor(n));
+}
+function fmtCps(n) {
+  if (n >= 1e6) return fmt(n);
+  return n < 100 ? nfDec.format(n) : nfInt.format(Math.round(n));
+}
+
+/* ───────────── Spiel-Logik ───────────── */
+
+function has(id) { return state.owned.includes(id); }
+function frenzyActive() { return Date.now() < buffs.frenzy; }
+function clickFrenzyActive() { return Date.now() < buffs.click; }
+
+function globalMult() {
+  let m = 1;
+  for (const u of UPGRADES)
+    if (u.type === 'global' && has(u.id)) m *= u.mult;
+  m *= 1 + state.stars * STAR_BONUS;     // Sterne-Rezepte
+  m *= 1 + state.ach.length * ACH_BONUS; // Erfolge
+  return m;
+}
+function buildingMult(bid) {
+  let m = 1;
+  for (const u of UPGRADES)
+    if (u.type === 'building' && u.target === bid && has(u.id)) m *= u.mult;
+  return m;
+}
+function cps() {
+  let sum = 0;
+  for (const b of BUILDINGS)
+    sum += b.cps * state.counts[b.id] * buildingMult(b.id);
+  return sum * globalMult() * (frenzyActive() ? 7 : 1);
+}
+function clickPower() {
+  let p = 1;
+  for (const u of UPGRADES)
+    if (u.type === 'click' && has(u.id)) p *= u.mult;
+  for (const u of UPGRADES)
+    if (u.type === 'clickcps' && has(u.id)) p += cps() * u.pct;
+  return p * (clickFrenzyActive() ? 10 : 1);
+}
+
+function costOf(b, n) {
+  const start = b.base * Math.pow(COST_GROWTH, state.counts[b.id]);
+  if (n === 1) return start;
+  return start * (Math.pow(COST_GROWTH, n) - 1) / (COST_GROWTH - 1);
+}
+function maxAffordable(b) {
+  const start = b.base * Math.pow(COST_GROWTH, state.counts[b.id]);
+  if (state.cookies < start) return 0;
+  return Math.max(0, Math.floor(Math.log(state.cookies * (COST_GROWTH - 1) / start + 1) / Math.log(COST_GROWTH)));
+}
+
+function buyBuilding(b) {
+  let n = buyAmount === 'max' ? maxAffordable(b) : buyAmount;
+  if (n < 1) return;
+  const price = costOf(b, n);
+  if (state.cookies < price) return;
+  state.cookies -= price;
+  state.counts[b.id] += n;
+  pop(660);
+  renderShop();
+  renderAll();
+}
+
+function buyUpgrade(u) {
+  if (has(u.id) || state.cookies < u.cost) return;
+  state.cookies -= u.cost;
+  state.owned.push(u.id);
+  pop(880);
+  toast(`✨ ${u.name} gekauft!`);
+  renderShop();
+  renderAll();
+}
+
+function gain(n) {
+  state.cookies += n;
+  state.total += n;
+  state.allTotal += n;
+}
+
+/* ───────────── Prestige ───────────── */
+
+function starsFor(total) {
+  return Math.floor(Math.sqrt(total / PRESTIGE_BASE));
+}
+
+function doPrestige() {
+  const newStars = starsFor(state.total);
+  if (newStars < 1) return;
+  if (!confirm(`Bäckerei verkaufen für ${newStars} ⭐ Sterne-Rezepte?\n\nKekse, Ausbauten und Verbesserungen werden zurückgesetzt – die Sterne (+${newStars * 10} % Produktion) bleiben für immer!`)) return;
+
+  state.stars += newStars;
+  state.prestiges++;
+  state.cookies = 0;
+  state.total = 0;
+  state.counts = Object.fromEntries(BUILDINGS.map(b => [b.id, 0]));
+  state.owned = [];
+  buffs = { frenzy: 0, click: 0 };
+  lastRank = 0;
+
+  pop(990); setTimeout(() => pop(1320), 130);
+  toast(`♻️ Neueröffnung! Du backst jetzt dauerhaft ${nfInt.format(state.stars * 10)} % schneller.`);
+  save();
+  renderShop();
+  renderAll();
+}
+
+/* ───────────── Goldener Knochen ───────────── */
+
+function scheduleGold(first) {
+  const delay = first ? 25000 + Math.random() * 20000 : 50000 + Math.random() * 70000;
+  setTimeout(spawnGold, delay);
+}
+
+function spawnGold() {
+  const el = document.createElement('button');
+  el.className = 'goldbone';
+  el.textContent = '🦴';
+  el.setAttribute('aria-label', 'Goldener Knochen');
+  el.style.left = (8 + Math.random() * 76) + 'vw';
+  el.style.top = (16 + Math.random() * 56) + 'vh';
+
+  const despawn = setTimeout(() => el.remove(), 11000);
+
+  el.addEventListener('click', () => {
+    clearTimeout(despawn);
+    el.remove();
+    state.goldClicks++;
+    pop(1200); setTimeout(() => pop(1500), 100);
+
+    const roll = Math.random();
+    if (roll < 0.55) {
+      buffs.frenzy = Date.now() + 30000;
+      toast('🌟 WUFF-RAUSCH! Deine Produktion läuft 30 Sekunden auf ×7!');
+    } else if (roll < 0.8) {
+      const bonus = Math.max(50, Math.min(state.cookies * 0.15, cps() * 900));
+      gain(bonus);
+      toast(`🌟 KEKS-REGEN! +${fmt(bonus)} Kekse!`);
+    } else {
+      buffs.click = Date.now() + 15000;
+      toast('🌟 KLICK-RAUSCH! 15 Sekunden lang zählt jeder Klick ×10!');
+    }
+    renderAll();
+  });
+
+  document.body.appendChild(el);
+  scheduleGold(false);
+}
+
+/* ───────────── Hunde-Kundschaft ───────────── */
+
+const DOGS = ['🐕','🐩','🦮','🐕‍🦺','🐶'];
+setInterval(() => {
+  if (Math.random() < 0.45) return;
+  const w = document.createElement('div');
+  w.className = 'walker flip r';
+  w.innerHTML = `<span>${DOGS[Math.floor(Math.random() * DOGS.length)]}</span>`;
+  w.style.animationDuration = (11 + Math.random() * 9) + 's';
+  document.body.appendChild(w);
+  w.addEventListener('animationend', e => { if (e.target === w) w.remove(); });
+}, 16000);
+
+/* ───────────── Sound (winziger WebAudio-Pop) ───────────── */
+
+let audioCtx = null;
+function pop(freq = 520) {
+  if (!state.sound) return;
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = 'triangle';
+    o.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(freq * .55, audioCtx.currentTime + .09);
+    g.gain.setValueAtTime(.12, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001, audioCtx.currentTime + .12);
+    o.connect(g).connect(audioCtx.destination);
+    o.start();
+    o.stop(audioCtx.currentTime + .13);
+  } catch (e) { /* Audio nicht verfügbar */ }
+}
+
+/* ───────────── DOM-Referenzen ───────────── */
+
+const $ = id => document.getElementById(id);
+const elCount = $('cookieCount'), elCps = $('cpsLabel'), elPerClick = $('perClick'), elBuffs = $('buffs');
+const elTotal = $('statTotal'), elClicks = $('statClicks'), elGold = $('statGold'), elPrestige = $('statPrestige');
+const elRankName = $('rankName'), elRankLvl = $('rankLvl'), elRankBar = $('rankBar'), elRankNext = $('rankNext');
+const elStarCount = $('starCount'), elStarInfo = $('starInfo'), elPrestigeBtn = $('prestigeBtn');
+const elBuildings = $('buildings'), elUpgrades = $('upgrades'), elAch = $('achievements'), elAchLabel = $('achLabel');
+const elTip = $('tip'), elToast = $('toast'), elTicker = $('ticker');
+const wrap = $('clickerWrap'), biscuit = $('biscuit');
+
+/* ───────────── Rendering ───────────── */
+
+const bEls = {};
+
+function renderShop() {
+  if (!elBuildings.children.length) {
+    for (const b of BUILDINGS) {
+      const btn = document.createElement('button');
+      btn.className = 'b-item';
+      btn.innerHTML = `
+        <span class="ico">${b.icon}</span>
+        <span class="info">
+          <span class="name">${b.name}</span><br>
+          <span class="desc">${b.desc}</span><br>
+          <span class="prod"></span>
+        </span>
+        <span class="right">
+          <span class="count"></span><br>
+          <span class="cost"></span>
+        </span>`;
+      btn.addEventListener('click', () => buyBuilding(b));
+      elBuildings.appendChild(btn);
+      bEls[b.id] = {
+        root: btn,
+        count: btn.querySelector('.count'),
+        cost: btn.querySelector('.cost'),
+        prod: btn.querySelector('.prod'),
+      };
+    }
+  }
+
+  elUpgrades.innerHTML = '';
+  const available = UPGRADES.filter(u => !has(u.id));
+  if (!available.length) {
+    elUpgrades.innerHTML = '<span class="empty">Alle Verbesserungen gekauft – wow! 🏆</span>';
+  }
+  for (const u of available) {
+    const btn = document.createElement('button');
+    btn.className = 'upg';
+    btn.textContent = u.icon;
+    btn.dataset.uid = u.id;
+    btn.addEventListener('click', () => buyUpgrade(u));
+    btn.addEventListener('mousemove', e => showTip(e, `<b>${u.name}</b> · ${fmt(u.cost)} 🍪<br>${u.desc}`));
+    btn.addEventListener('mouseleave', hideTip);
+    elUpgrades.appendChild(btn);
+  }
+
+  renderAchievements();
+}
+
+function renderAchievements() {
+  elAch.innerHTML = '';
+  elAchLabel.textContent = `(${state.ach.length}/${ACHIEVEMENTS.length} · +${state.ach.length} % Produktion)`;
+  for (const a of ACHIEVEMENTS) {
+    const unlocked = state.ach.includes(a.id);
+    const d = document.createElement('div');
+    d.className = 'upg' + (unlocked ? '' : ' locked');
+    d.textContent = unlocked ? a.icon : '❓';
+    d.addEventListener('mousemove', e => showTip(e,
+      unlocked
+        ? `<b>${a.icon} ${a.name}</b><br>${a.desc}<br><b>+1 % Produktion</b>`
+        : `<b>❓ ???</b><br>${a.desc}`));
+    d.addEventListener('mouseleave', hideTip);
+    elAch.appendChild(d);
+  }
+}
+
+function checkAchievements() {
+  let unlocked = false;
+  for (const a of ACHIEVEMENTS) {
+    if (!state.ach.includes(a.id) && a.cond(state)) {
+      state.ach.push(a.id);
+      toast(`🏆 Erfolg freigeschaltet: ${a.name}!`);
+      pop(1100);
+      unlocked = true;
+    }
+  }
+  if (unlocked) renderAchievements();
+}
+
+function renderAll() {
+  elCount.textContent = fmt(state.cookies);
+  elCps.textContent = `${fmtCps(cps())} Kekse pro Sekunde`;
+  elPerClick.textContent = `(+${fmtCps(clickPower())} pro Klick)`;
+  elTotal.textContent = fmt(state.allTotal);
+  elClicks.textContent = nfInt.format(state.clicks);
+  elGold.textContent = nfInt.format(state.goldClicks);
+  elPrestige.textContent = nfInt.format(state.prestiges);
+
+  // Aktive Boni
+  let buffHtml = '';
+  if (frenzyActive()) buffHtml += `<span class="buff-pill">🌟 Wuff-Rausch ×7 · ${Math.ceil((buffs.frenzy - Date.now()) / 1000)}s</span>`;
+  if (clickFrenzyActive()) buffHtml += `<span class="buff-pill">👆 Klick-Rausch ×10 · ${Math.ceil((buffs.click - Date.now()) / 1000)}s</span>`;
+  elBuffs.innerHTML = buffHtml;
+  document.body.classList.toggle('frenzy', frenzyActive());
+
+  // Gebäude-Werte
+  for (const b of BUILDINGS) {
+    const e = bEls[b.id];
+    const n = buyAmount === 'max' ? Math.max(1, maxAffordable(b)) : buyAmount;
+    const price = costOf(b, n);
+    const afford = state.cookies >= price && (buyAmount !== 'max' || maxAffordable(b) >= 1);
+    e.root.classList.toggle('cant', !afford);
+    e.count.textContent = state.counts[b.id] || '';
+    const label = buyAmount === 'max' ? `×${maxAffordable(b) || 1}` : (buyAmount > 1 ? `×${buyAmount}` : '');
+    e.cost.textContent = `${fmt(price)} 🍪 ${label}`;
+    const own = state.counts[b.id];
+    e.prod.textContent = own
+      ? `produziert ${fmtCps(b.cps * own * buildingMult(b.id) * globalMult())}/s`
+      : `+${fmtCps(b.cps)}/s pro Stück`;
+  }
+
+  // Upgrades freischalten/sperren
+  for (const btn of elUpgrades.querySelectorAll('.upg')) {
+    const u = UPGRADES.find(x => x.id === btn.dataset.uid);
+    btn.classList.toggle('locked', state.cookies < u.cost);
+  }
+
+  // Meilenstein
+  let idx = 0;
+  for (let i = 0; i < RANKS.length; i++) if (state.total >= RANKS[i].at) idx = i;
+  elRankName.textContent = RANKS[idx].name;
+  elRankLvl.textContent = `Stufe ${idx + 1}`;
+  const next = RANKS[idx + 1];
+  if (next) {
+    const span = next.at - RANKS[idx].at;
+    const prog = Math.min(1, (state.total - RANKS[idx].at) / span);
+    elRankBar.style.width = (prog * 100).toFixed(1) + '%';
+    elRankNext.textContent = `Noch ${fmt(Math.max(0, next.at - state.total))} Kekse bis: ${next.name}`;
+  } else {
+    elRankBar.style.width = '100%';
+    elRankNext.textContent = 'Höchste Stufe erreicht – du bist eine Legende! 🏆';
+  }
+
+  // Prestige
+  elStarCount.textContent = `${state.stars} ⭐`;
+  const potential = starsFor(state.total);
+  if (potential >= 1) {
+    elPrestigeBtn.disabled = false;
+    elPrestigeBtn.textContent = `🌟 Bäckerei verkaufen für +${potential} ⭐`;
+    elStarInfo.textContent = `Aktuell: +${nfInt.format(state.stars * 10)} % Produktion. Verkauf bringt dauerhaft +${potential * 10} % dazu!`;
+  } else {
+    elPrestigeBtn.disabled = true;
+    elPrestigeBtn.textContent = '🌟 Bäckerei verkaufen';
+    elStarInfo.textContent = `Backe ${fmt(PRESTIGE_BASE)} Kekse in diesem Durchlauf, um beim Verkauf Sterne-Rezepte zu erhalten (je +10 % für immer). Noch ${fmt(Math.max(0, PRESTIGE_BASE - state.total))}.`;
+  }
+}
+
+/* ───────────── Tooltip / Toast / Ticker ───────────── */
+
+function showTip(e, html) {
+  elTip.innerHTML = html;
+  elTip.classList.add('show');
+  const x = Math.min(e.clientX + 14, window.innerWidth - 250);
+  elTip.style.left = x + 'px';
+  elTip.style.top = (e.clientY + 16) + 'px';
+}
+function hideTip() { elTip.classList.remove('show'); }
+
+let toastTimer;
+function toast(msg) {
+  elToast.textContent = msg;
+  elToast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => elToast.classList.remove('show'), 3200);
+}
+
+setInterval(() => {
+  elTicker.classList.add('fade');
+  setTimeout(() => {
+    elTicker.textContent = NEWS[Math.floor(Math.random() * NEWS.length)];
+    elTicker.classList.remove('fade');
+  }, 400);
+}, 9000);
+
+/* ───────────── Klick-Handling ───────────── */
+
+let lastRank = -1;
+
+biscuit.addEventListener('click', e => {
+  const p = clickPower();
+  gain(p);
+  state.clicks++;
+
+  biscuit.classList.remove('squish');
+  void biscuit.offsetWidth;
+  biscuit.classList.add('squish');
+  pop(500 + Math.random() * 120);
+
+  const r = wrap.getBoundingClientRect();
+  const x = e.clientX - r.left, y = e.clientY - r.top;
+
+  const f = document.createElement('span');
+  f.className = 'float-num';
+  f.textContent = '+' + fmtCps(p);
+  f.style.left = x + 'px';
+  f.style.top = (y - 14) + 'px';
+  wrap.appendChild(f);
+  f.addEventListener('animationend', () => f.remove());
+
+  for (let i = 0; i < 6; i++) {
+    const c = document.createElement('span');
+    c.className = 'crumb';
+    c.style.left = x + 'px';
+    c.style.top = y + 'px';
+    const ang = Math.random() * Math.PI * 2;
+    const dist = 40 + Math.random() * 60;
+    c.style.setProperty('--dx', Math.cos(ang) * dist + 'px');
+    c.style.setProperty('--dy', (Math.sin(ang) * dist - 30) + 'px');
+    wrap.appendChild(c);
+    c.addEventListener('animationend', () => c.remove());
+  }
+
+  renderAll();
+});
+
+/* ───────────── Kauf-Menge / Buttons ───────────── */
+
+$('buyToggle').addEventListener('click', e => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  buyAmount = btn.dataset.amount === 'max' ? 'max' : parseInt(btn.dataset.amount, 10);
+  for (const b of $('buyToggle').children) b.classList.toggle('active', b === btn);
+  renderAll();
+});
+
+elPrestigeBtn.addEventListener('click', doPrestige);
+
+$('soundBtn').addEventListener('click', () => {
+  state.sound = !state.sound;
+  $('soundBtn').textContent = state.sound ? '🔔 Ton: an' : '🔕 Ton: aus';
+});
+
+$('resetBtn').addEventListener('click', () => {
+  if (!confirm('Wirklich KOMPLETT von vorn beginnen? Auch Sterne und Erfolge gehen verloren!')) return;
+  localStorage.removeItem(SAVE_KEY);
+  location.reload();
+});
+
+/* ───────────── Speichern / Laden ───────────── */
+
+function save() {
+  state.ts = Date.now();
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+function load() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return;
+    const s = JSON.parse(raw);
+    state = { ...state, ...s, counts: { ...state.counts, ...(s.counts || {}) } };
+    if (!Array.isArray(state.ach)) state.ach = [];
+    if (typeof state.allTotal !== 'number' || state.allTotal < state.total) state.allTotal = state.total;
+
+    // Offline-Fortschritt (max. 8 Stunden, halbe Rate)
+    const elapsed = Math.min((Date.now() - (s.ts || Date.now())) / 1000, 8 * 3600);
+    const offline = elapsed * cps() * 0.5;
+    if (offline >= 1) {
+      gain(offline);
+      setTimeout(() => toast(`💤 Während du weg warst, wurden ${fmt(offline)} Kekse gebacken!`), 600);
+    }
+  } catch (e) { /* korrupter Spielstand → frisch starten */ }
+}
+
+setInterval(save, 15000);
+window.addEventListener('beforeunload', save);
+
+/* ───────────── Game-Loop ───────────── */
+
+const TICK_MS = 100;
+let achTimer = 0;
+setInterval(() => {
+  gain(cps() * TICK_MS / 1000);
+
+  let idx = 0;
+  for (let i = 0; i < RANKS.length; i++) if (state.total >= RANKS[i].at) idx = i;
+  if (lastRank !== -1 && idx > lastRank) {
+    toast(`🎉 Aufstieg! Deine Bäckerei ist jetzt: ${RANKS[idx].name}`);
+    pop(990);
+  }
+  lastRank = idx;
+
+  achTimer += TICK_MS;
+  if (achTimer >= 1000) { achTimer = 0; checkAchievements(); }
+
+  renderAll();
+}, TICK_MS);
+
+/* ───────────── Start ───────────── */
+
+load();
+renderShop();
+renderAll();
+checkAchievements();
+lastRank = (() => { let i = 0; for (let k = 0; k < RANKS.length; k++) if (state.total >= RANKS[k].at) i = k; return i; })();
+scheduleGold(true);
+
+})();
+</script>
+</body>
+</html>
