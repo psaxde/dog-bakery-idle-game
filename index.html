@@ -29,7 +29,7 @@
 
   * { margin:0; padding:0; box-sizing:border-box; }
 
-  html { height:100%; }
+  html { height:100%; touch-action:manipulation; }
 
   /* Touch: kein Doppeltipp-Zoom, kein Markieren, kein Callout-Menü */
   button {
@@ -195,6 +195,9 @@
     width:100%;
     background:none; border:none; cursor:pointer;
     -webkit-tap-highlight-color:transparent;
+    /* touch-action:none statt manipulation: iOS startet hier gar keine
+       Gesten (kein Doppeltipp-Zoom, kein Scroll-Beginn auf dem Keks) */
+    touch-action:none;
     transition:transform .08s ease, filter .3s ease;
     filter:drop-shadow(0 14px 18px rgba(91,58,36,.35));
   }
@@ -434,6 +437,7 @@
     filter:drop-shadow(0 0 14px rgba(232,182,76,1)) drop-shadow(0 0 30px rgba(232,182,76,.6));
     animation:goldFloat 2.2s ease-in-out infinite, goldIn .4s ease-out;
     -webkit-tap-highlight-color:transparent;
+    touch-action:none;
   }
   .goldbone::after {
     content:"✨";
@@ -891,6 +895,7 @@ function spawnGold() {
 
   const despawn = setTimeout(() => el.remove(), 11000);
 
+  el.addEventListener('touchend', e => e.preventDefault(), { passive: false });
   el.addEventListener('pointerdown', e => {
     e.preventDefault();
     clearTimeout(despawn);
@@ -1219,6 +1224,13 @@ biscuit.addEventListener('click', e => {
   const r = wrap.getBoundingClientRect();
   bake(r.left + r.width / 2, r.top + r.height / 2);
 });
+// iOS Safari ignoriert user-scalable=no; nur preventDefault auf touchend
+// verhindert den Doppeltipp-Zoom bei schnellen Tippfolgen zuverlässig.
+// Der Kompat-click entfällt dadurch, also auch das pointerBaked-Flag zurücksetzen.
+biscuit.addEventListener('touchend', e => {
+  e.preventDefault();
+  pointerBaked = false;
+}, { passive: false });
 
 /* ───────────── Touch-Schutz (Zoom & Kontextmenü) ───────────── */
 
@@ -1227,6 +1239,18 @@ document.addEventListener('dblclick', e => e.preventDefault());       // Doppelt
 document.addEventListener('contextmenu', e => {                       // Langdruck-Menü auf Buttons
   if (e.target.closest('button')) e.preventDefault();
 });
+
+// iOS-Fallback gegen Doppeltipp-Zoom auf der restlichen Seite. Shop-, Menü-
+// und Prestige-Buttons sind ausgenommen, weil sie den click brauchen, den
+// preventDefault hier unterdrücken würde (schnelles Nachkaufen!).
+let lastTouchEnd = 0;
+document.addEventListener('touchend', e => {
+  const now = Date.now();
+  if (now - lastTouchEnd <= 350 && !e.target.closest('.shop, .util, .prestige')) {
+    e.preventDefault();
+  }
+  lastTouchEnd = now;
+}, { passive: false });
 
 /* ───────────── Kauf-Menge / Buttons ───────────── */
 
